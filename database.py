@@ -54,16 +54,6 @@ def insert_data_users(first_name, last_name, vk_id, vk_link):
         )
 
 
-# добавить оффсет везде если не получится
-# def insert_data_seen_users(vk_id, offset):
-#     """ВСТАВКА ДАННЫХ В ТАБЛИЦУ SEEN_USERS"""
-#     with connection.cursor() as cursor:
-#         cursor.execute(
-#             f"""INSERT INTO seen_users (vk_id)
-#             VALUES ('{vk_id}')
-#             OFFSET '{offset}';"""
-#         )
-
 def insert_data_seen_users(vk_id):
     """ВСТАВКА ДАННЫХ В ТАБЛИЦУ SEEN_USERS"""
     with connection.cursor() as cursor:
@@ -82,8 +72,7 @@ def get_unseen_users(offset):
                         LEFT JOIN seen_users su
                         ON u.vk_id = su.vk_id
                         WHERE su.vk_id IS NULL
-                        OFFSET '{offset}'
-                        ;"""
+                        OFFSET '{offset}';"""
         )
         return cursor.fetchone()
 
@@ -97,16 +86,7 @@ def drop_users():
         print('Таблица USERS удалена')
 
 
-# def drop_seen_users():
-#     """УДАЛЕНИЕ ТАБЛИЦЫ USERS"""
-#     with connection.cursor() as cursor:
-#         cursor.execute(
-#             """DROP TABLE IF EXISTS seen_users CASCADE;"""
-#         )
-#         print('Таблица seen_users удалена')
-
 def creating_database():
     drop_users()
-    # drop_seen_users()
     create_table_users()
     create_table_seen_users()

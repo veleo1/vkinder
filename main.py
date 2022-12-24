@@ -56,7 +56,6 @@ class VKinderBot:
                   'count': 1000}
         resp = requests.get(url, params=params)
         resp_json = resp.json()
-        # vk_id = 0
         if resp.status_code == HTTP_STATUS:
             dict_1 = resp_json['response']
             list_1 = dict_1['items']
@@ -67,7 +66,6 @@ class VKinderBot:
                     vk_id = str(person_dict.get('id'))
                     vk_link = 'vk.com/id' + str(person_dict.get('id'))
                     insert_data_users(first_name, last_name, vk_id, vk_link)
-                    # return first_name, last_name, vk_id, vk_link
                 else:
                     continue
 
@@ -104,47 +102,10 @@ class VKinderBot:
                     comments = photo_comments.get('count')
                     dict_photos[comments] = photo_id
             list_of_ids = sorted(dict_photos.items(), reverse=True)
-            # return [x for x in list_of_ids[0:3]]
             return [x[1] for x in list_of_ids[0:3]]
-
-    # def get_photos_marked(self, id):
-    #     """ПОЛУЧЕНИЕ ID ФОТОГРАФИЙ, на которых отмечен пользователь, С СОРТИРОВКОЙ"""
-    #     url = 'https://api.vk.com/method/photos.getUserPhotos'
-    #     params = {'access_token': user_token,
-    #               'v': V,
-    #               'user_id': id,
-    #               'extended': 1}
-    #     resp2 = requests.get(url, params=params)
-    #     dict_photos2 = dict()
-    #     resp_json2 = resp2.json()
-    #     if resp2.status_code == HTTP_STATUS:
-    #         dict_2 = resp_json2['response']
-    #         list_2 = dict_2['items']
-    #         for photo in list_2:
-    #             photo_id1 = str(photo.get('id'))
-    #             photo_likes1 = photo.get('likes')
-    #             photo_comments1 = photo.get('comments')
-    #             if photo_likes1.get('count'):
-    #                 likes = photo_likes1.get('count')
-    #                 dict_photos2[likes] = photo_id1
-    #             if photo_comments1.get('count'):
-    #                 comments = photo_comments1.get('count')
-    #                 dict_photos2[comments] = photo_id1
-    #         list_of_ids1 = sorted(dict_photos2.items(), reverse=True)
-    #         return [x for x in list_of_ids1[0:3]]
 
     def get_photo_list(self, offset, id):
         """ПОЛУЧЕНИЕ СПИСКА ФОТО"""
-        # photo_list_profile = self.get_photos_id(self.person_id(offset))
-        # try:
-        #     photo_list_marked = self.get_photos_marked(self.person_id(offset))
-        #     photo_list=photo_list_profile.append(photo_list_marked)
-        #     # list_of_ids2 = sorted(photo_list, reverse=True)
-        #     return [x[1] for x in photo_list[0:3]]
-        # except KeyError:
-        #     print('No access')
-        # else:
-        #     photo_list = photo_list_profile
         photo_list = self.get_photos_id(self.person_id(offset))
         if len(photo_list) == 1:
             photo1 = str(f'photo{id}_{photo_list[0]}')
@@ -187,13 +148,7 @@ class VKinderBot:
         """ЗАПУСК ВСЕХ МЕТОДОВ """
         self.write_msg(user_id, self.found_info(offset))
         self.person_id(offset)
-        # print(self.get_photos_marked(self.person_id(offset)))
-        # print(self.found_info(offset))#убрать
         self.get_photos_id(self.person_id(offset))
-
-        # print(self.get_photo_list(offset, self.person_id(offset)))# убрать
-        # print(self.get_photo_list(offset, self.person_id(offset))[0])# убрать
-
         self.send_photo_1(user_id, 'Фото №1', offset, self.person_id(offset))
         try:
             self.send_photo_2(user_id, 'Фото №2', offset, self.person_id(offset))
@@ -208,9 +163,9 @@ class VKinderBot:
         for i in user_info:
             list_person.append(i)
         return str(list_person[2])
-        # return self.search_users()
 
     def greeting(self, user_id):
+        """ВЫВОД ПРИВЕТСТВИЯ"""
         self.write_msg(user_id,
                        f"Привет, {vk_bot.get_name(user_id)}!\n"
                        "Добро пожаловать в чат-бот Vkinder. Чтобы я мог подобрать для тебя пару, нужно ответить на несколько вопросов. Нажми или напиши 'начать'.\n"
@@ -228,7 +183,8 @@ class VKinderBot:
         resp = requests.get(url, params=params)
         if resp.status_code == HTTP_STATUS:
             self.write_msg(user_id, 'Лайк поставлен.\n'
-                                    'Жми на кнопку "Далее", чтобы продолжить поиск.')
+                           'Жми на кнопку "Далее", чтобы продолжить поиск.\n'
+                           'Чтобы закончить поиск, напиши "пока".')
 
     def like_photo2(self, id, user_id):
         """ПОСТАВИТЬ ЛАЙК НА ФОТО 2"""
@@ -242,8 +198,9 @@ class VKinderBot:
         resp = requests.get(url, params=params)
         if resp.status_code == HTTP_STATUS:
             self.write_msg(user_id, 'Лайк поставлен.\n'
-                                    'Жми на кнопку "Далее", чтобы продолжить поиск.')
-
+                           'Жми на кнопку "Далее", чтобы продолжить поиск.\n'
+                           'Чтобы закончить поиск, напиши "пока".')
+            
     def like_photo3(self, id, user_id):
         """ПОСТАВИТЬ ЛАЙК НА ФОТО 3"""
         photo_list3 = self.get_photos_id(id)
@@ -256,17 +213,8 @@ class VKinderBot:
         resp = requests.get(url, params=params)
         if resp.status_code == HTTP_STATUS:
             self.write_msg(user_id, 'Лайк поставлен.\n'
-                                    'Жми на кнопку "Далее", чтобы продолжить поиск.')
+                           'Жми на кнопку "Далее", чтобы продолжить поиск.\n'
+                           'Чтобы закончить поиск, напиши "пока".')
 
 
 vk_bot = VKinderBot()
-# vk_bot.like_photo1(13172146, 184177691)
-# creating_database()
-# print(vk_bot.search_users(1, 25, 28, 'Пермь'))
-# print(vk_bot.person_id(offset))
-# print(vk_bot.person_id(offset=0))
-# id_own = get_seen_user()
-# print(id_own)
-# print(vk_bot.found_info(offset))
-# print(vk_bot.get_photos_marked(210469101))
-# print(vk_bot.get_photo_list(offset, vk_bot.person_id(offset)))

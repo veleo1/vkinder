@@ -17,8 +17,8 @@ def create_table_users():
                 id serial,
                 first_name varchar(50) NOT NULL,
                 last_name varchar(25) NOT NULL,
-                vk_id varchar(20) NOT NULL PRIMARY KEY,
-                vk_link varchar(50));"""
+                vk_id varchar(20) NOT NULL PRIMARY KEY)
+                ;"""
         )
     print("Таблица USERS создана")
 
@@ -45,12 +45,12 @@ def get_seen_user():
         return cursor.fetchone()
 
 
-def insert_data_users(first_name, last_name, vk_id, vk_link):
+def insert_data_users(first_name, last_name, vk_id):
     """ВСТАВКА ДАННЫХ В ТАБЛИЦУ USERS"""
     with connection.cursor() as cursor:
         cursor.execute(
-            f"""INSERT INTO users (first_name, last_name, vk_id, vk_link)
-            VALUES ('{first_name}', '{last_name}', '{vk_id}', '{vk_link}');"""
+            f"""INSERT INTO users (first_name, last_name, vk_id)
+            VALUES ('{first_name}', '{last_name}', '{vk_id}');"""
         )
 
 
@@ -68,11 +68,12 @@ def get_unseen_users(offset):
     """ВЫБОРКА ИЗ НЕПРОСМОТРЕННЫХ ЛЮДЕЙ"""
     with connection.cursor() as cursor:
         cursor.execute(
-            f"""SELECT u.first_name, u.last_name, u.vk_id, u.vk_link, su.vk_id FROM users u
+            f"""SELECT u.first_name, u.last_name, u.vk_id, su.vk_id FROM users u
                         LEFT JOIN seen_users su
                         ON u.vk_id = su.vk_id
                         WHERE su.vk_id IS NULL
-                        OFFSET '{offset}';"""
+                        OFFSET '{offset}'
+                        ;"""
         )
         return cursor.fetchone()
 

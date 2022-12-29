@@ -16,8 +16,8 @@ def create_table_users():
             """CREATE TABLE IF NOT EXISTS users(
                 id serial,
                 first_name varchar(50) NOT NULL,
-                last_name varchar(25) NOT NULL,
-                vk_id varchar(20) NOT NULL PRIMARY KEY)
+                last_name varchar(50) NOT NULL,
+                vk_id varchar(50) NOT NULL PRIMARY KEY)
                 ;"""
         )
     print("Таблица USERS создана")

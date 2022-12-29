@@ -11,7 +11,7 @@ The chat bot sends to user 3 most popular photos (with the largest number of lik
 *city
 
 ## Configurations
-1. You can find installation requirements in the file 'requirements.txt'
+1. You can find installation dependencies in the file 'requirements.txt'
 2. Before running any code you need to edit variables in the file 'configuration.py'. You can get your access token to vk.com at https://vkhost.github.io/
 3. For running chat bot use 'bot.py'
 4. File 'main.py' contains all methods for the bot to work.

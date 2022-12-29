@@ -1,5 +1,5 @@
-from main import *
-from database import *
+from main import vk_bot, offset
+from database import creating_database, insert_data_seen_users, get_seen_user
 
 if __name__ == '__main__':
     while True:

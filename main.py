@@ -1,10 +1,12 @@
 from random import randrange
 import requests
 import vk_api
-from database import *
+from database import insert_data_users, get_unseen_users
 from vk_api.longpoll import VkLongPoll, VkEventType
-from configuration import *
-from keyboard import *
+from configuration import V, group_token, user_token
+from keyboard import keyboard
+
+offset: int = 0
 
 
 class VKinderBot:
